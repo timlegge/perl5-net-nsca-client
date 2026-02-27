@@ -20,7 +20,7 @@ use Net::NSCA::Client::Library 0.009 qw(Bytes);
 
 ###############################################################################
 # MODULES
-use Data::Rand::Obscure 0.020;
+use Crypt::SysRandom 'random_bytes';
 use Net::NSCA::Client::ServerConfig ();
 use Net::NSCA::Client::Utils qw(initialize_moose_attr_early);
 
@@ -116,9 +116,7 @@ sub to_string {
 sub _build_initialization_vector {
 	my ($self) = @_;
 
-	return Data::Rand::Obscure::create_bin(
-		length => $self->server_config->initialization_vector_length,
-	);
+    return random_bytes($self->server_config->initialization_vector_length);
 }
 sub _build_raw_packet {
 	my ($self) = @_;
@@ -259,7 +257,7 @@ string representation is what will be sent over the network.
 
 =over
 
-=item * L<Data::Rand::Obscure|Data::Rand::Obscure> 0.020
+=item * L<Crypt::SysRandom> 0.007
 
 =item * L<Moose|Moose> 0.89
 
